@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Turkish Flag Rendered in SVG</title>
+    <script src="svg.min.js"></script>
+</head>
+<body>
+<h1>Turkish Flag Rendered in SVG</h1>
+<p>by Justin Tokke</p>
+<div id="flag"></div>
+<script>
+    document.addEventListener('DOMContentLoaded',turkish_flag);
+    function turkish_flag(){
+        //Turkish Flag
+        var draw = SVG("flag").size(1000, 1000).spof();
+        var width = 500;
+        var rect = draw.rect((width * 1.5),width).attr({fill: '#CC0000'});
+        var cir = draw.circle(width/2).attr({
+            fill: '#FFF',
+            cx: width/2,
+            cy: width/2
+        });
+        var cir2 = draw.circle(width * (2/5)).attr({
+            fill: "#CC0000",
+            cx: ((width * (1/2)) + (width * (1/16))),
+            cy: (width * (1/2))
+        });
+        var cir2bb = cir2.bbox();
+        var cir3 = draw.circle(width * (1/4)).attr({
+            fill: "transparent",
+            cx: (cir2bb.x + (width * (1/3)) + ((width * (1/4))/2)),
+            cy: (width * (1/2))
+        });
+
+        var cir3bb = cir3.bbox();
+        var cir3bbRadius = ((width * (1/4))/2);
+
+        //calculate the pentagram points.
+        var radian = (2 * Math.PI);
+        var pentRad = radian/5;
+        var pointsRaw = [];
+        for(var i=0; i<5; i++) {
+            var pentX = cir3bb.cx + (cir3bbRadius * Math.cos(pentRad * i));
+            var pentY = cir3bb.cy + (cir3bbRadius * Math.sin(pentRad * i));
+            pointsRaw.push([pentX, pentY]);
+        }
+        //change the order.
+        var points = new SVG.PointArray([pointsRaw[0],pointsRaw[2],pointsRaw[4],pointsRaw[1],pointsRaw[3]]);
+        var star = draw.polygon(points).attr({
+            fill: "#FFF"
+        });
+        star.rotate(180);
+    }
+</script>
+</body>
+</html>
